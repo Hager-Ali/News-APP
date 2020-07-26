@@ -17,6 +17,8 @@ class CategoryCard extends StatelessWidget {
     return GestureDetector(
       onTap: onPress,
       child: Container(
+        width: MediaQuery.of(context).size.width * 0.33,
+        height: MediaQuery.of(context).size.height * 0.06,
         margin: EdgeInsets.all(10.0),
         padding: EdgeInsets.all(10.0),
         decoration: BoxDecoration(
@@ -31,6 +33,7 @@ class CategoryCard extends StatelessWidget {
           textAlign: TextAlign.center,
           style: TextStyle(
             color: categoryTextColor,
+            fontSize: 17.0,
           ),
         ),
       ),

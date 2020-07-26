@@ -1,49 +1,41 @@
 import 'package:flutter/material.dart';
 
-class NewsCards extends StatefulWidget {
-  NewsCards({this.newsData});
-  final newsData;
+class NewsCards extends StatelessWidget {
+  final String articleTitle;
+  final String publishedTime;
+  final String articleImage;
+  final Function onPress;
 
-  @override
-  _NewsCardsState createState() => _NewsCardsState();
-}
-
-class _NewsCardsState extends State<NewsCards> {
-  String articleTitle;
-  String publishedTime;
-  String articleImage;
-
-  @override
-  void initState() {
-    super.initState();
-    updateUI(widget.newsData);
-  }
-
-  void updateUI(dynamic newsData) {
-    articleTitle = newsData['articles'][0]['title'];
-    publishedTime = newsData['articles'][0]['publishedAt'];
-    articleImage = newsData['articles'][0]['urlToImage'];
-
-    print(publishedTime);
-  }
+  NewsCards(
+      {this.articleImage, this.articleTitle, this.publishedTime, this.onPress});
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Column(
-        children: <Widget>[
-          Expanded(
-            child: Image.network(
-              'https://p.bigstockphoto.com/GeFvQkBbSLaMdpKXF1Zv_bigstock-Aerial-View-Of-Blue-Lakes-And--227291596.jpg',
+    return Container(
+      color: Colors.white,
+      child: GestureDetector(
+        onTap: onPress,
+        child: Column(
+          children: <Widget>[
+            Image.network(
+              articleImage,
+              scale: 1,
             ),
-          ),
-          Expanded(
-            child: Text('data'),
-          ),
-          Expanded(
-            child: Text('published time'),
-          ),
-        ],
+            Text(
+              articleTitle,
+              style: TextStyle(
+                fontSize: 15.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              publishedTime,
+              style: TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

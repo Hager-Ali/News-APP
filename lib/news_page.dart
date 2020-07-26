@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:news_app/details_page.dart';
+import 'package:news_app/networking.dart';
+import 'package:news_app/news_cards.dart';
+
 import 'category_card.dart';
 import 'constants.dart';
-import 'networking.dart';
-import 'news_cards.dart';
-
-const apiKey = '77f6896382d745f3aa8658560f91e92d';
 
 enum Categories {
-  All,
-  Sport,
-  Policy,
+  general,
+  business,
+  entertainment,
+  health,
+  science,
+  sports,
+  technology,
 }
 
 class NewsPage extends StatefulWidget {
@@ -18,23 +22,23 @@ class NewsPage extends StatefulWidget {
 }
 
 class _NewsPageState extends State<NewsPage> {
-  Color allCardColor = kActiveColor;
-  Color sportCardColor = kInactiveColor;
-  Color policyCardColor = kInactiveColor;
+  Color generalCardColor = kActiveColor;
+  Color businessCardColor = kInactiveColor;
+  Color entertainmentCardColor = kInactiveColor;
+  Color healthCardColor = kInactiveColor;
+  Color scienceCardColor = kInactiveColor;
+  Color sportsCardColor = kInactiveColor;
+  Color technologyCardColor = kInactiveColor;
 
-  var newsData;
-
-  Categories selectedCategory;
-
-  void getNewsData() async {
-    NetworkHelper networkHelper = NetworkHelper(
-        'https://newsapi.org/v2/top-headlines?country=eg&category=business&apiKey=$apiKey');
-    newsData = await networkHelper.getData();
-  }
+  Categories selectedCategory = Categories.general;
+  Stream stream = Stream.fromFuture(
+    NetworkHelper(
+            'https://newsapi.org/v2/top-headlines?country=de&category=general&apiKey=$apiKey')
+        .getData(),
+  );
 
   @override
   Widget build(BuildContext context) {
-    getNewsData();
     return Scaffold(
       appBar: AppBar(
         title: Center(
@@ -43,99 +47,223 @@ class _NewsPageState extends State<NewsPage> {
           ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            NewsCards(
-              newsData: newsData,
-            ),
             Container(
-              margin: EdgeInsets.only(left: 10.0, top: 10.0),
+              margin: EdgeInsets.only(left: 15.0, top: 15.0, bottom: 5.0),
               child: Text(
                 'Categories',
                 style: TextStyle(
-                  fontSize: 20.0,
+                  fontSize: 25.0,
                   fontWeight: FontWeight.bold,
                   color: Color(0xFF072B39),
                 ),
-              ),
-            ),
-            Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Expanded(
-                    child: CategoryCard(
-                      onPress: () {
-                        setState(() {
-                          selectedCategory = Categories.All;
-                        });
-                      },
-                      categoryColor: selectedCategory == Categories.All
-                          ? kActiveColor
-                          : kInactiveColor,
-                      categoryName: 'All',
-                      categoryTextColor: selectedCategory == Categories.All
-                          ? kInactiveColor
-                          : kActiveColor,
-                    ),
-                  ),
-                  Expanded(
-                    child: CategoryCard(
-                      onPress: () {
-                        setState(() {
-                          selectedCategory = Categories.Sport;
-                        });
-                      },
-                      categoryColor: selectedCategory == Categories.Sport
-                          ? kActiveColor
-                          : kInactiveColor,
-                      categoryName: 'Sport',
-                      categoryTextColor: selectedCategory == Categories.Sport
-                          ? kInactiveColor
-                          : kActiveColor,
-                    ),
-                  ),
-                  Expanded(
-                    child: CategoryCard(
-                      onPress: () {
-                        setState(() {
-                          selectedCategory = Categories.Policy;
-                        });
-                      },
-                      categoryColor: selectedCategory == Categories.Policy
-                          ? kActiveColor
-                          : kInactiveColor,
-                      categoryName: 'Policy',
-                      categoryTextColor: selectedCategory == Categories.Policy
-                          ? kInactiveColor
-                          : kActiveColor,
-                    ),
-                  ),
-                ],
               ),
             ),
             Container(
-              margin: EdgeInsets.only(left: 10.0, top: 10.0),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    CategoryCard(
+                      onPress: () {
+                        setState(() {
+                          selectedCategory = Categories.general;
+                          stream = Stream.fromFuture(
+                            NetworkHelper(
+                                    'https://newsapi.org/v2/top-headlines?country=de&category=general&apiKey=$apiKey')
+                                .getData(),
+                          );
+                        });
+                      },
+                      categoryColor: selectedCategory == Categories.general
+                          ? kActiveColor
+                          : kInactiveColor,
+                      categoryName: 'general',
+                      categoryTextColor: selectedCategory == Categories.general
+                          ? kInactiveColor
+                          : kActiveColor,
+                    ),
+                    CategoryCard(
+                      onPress: () {
+                        setState(() {
+                          selectedCategory = Categories.business;
+                          stream = Stream.fromFuture(
+                            NetworkHelper(
+                                    'https://newsapi.org/v2/top-headlines?country=de&category=business&apiKey=$apiKey')
+                                .getData(),
+                          );
+                        });
+                      },
+                      categoryColor: selectedCategory == Categories.business
+                          ? kActiveColor
+                          : kInactiveColor,
+                      categoryName: 'business',
+                      categoryTextColor: selectedCategory == Categories.business
+                          ? kInactiveColor
+                          : kActiveColor,
+                    ),
+                    CategoryCard(
+                      onPress: () {
+                        setState(() {
+                          selectedCategory = Categories.entertainment;
+                          stream = Stream.fromFuture(
+                            NetworkHelper(
+                                    'https://newsapi.org/v2/top-headlines?country=de&category=entertainment&apiKey=$apiKey')
+                                .getData(),
+                          );
+                        });
+                      },
+                      categoryColor:
+                          selectedCategory == Categories.entertainment
+                              ? kActiveColor
+                              : kInactiveColor,
+                      categoryName: 'entertainment',
+                      categoryTextColor:
+                          selectedCategory == Categories.entertainment
+                              ? kInactiveColor
+                              : kActiveColor,
+                    ),
+                    CategoryCard(
+                      onPress: () {
+                        setState(() {
+                          selectedCategory = Categories.health;
+                          stream = Stream.fromFuture(
+                            NetworkHelper(
+                                    'https://newsapi.org/v2/top-headlines?country=de&category=health&apiKey=$apiKey')
+                                .getData(),
+                          );
+                        });
+                      },
+                      categoryColor: selectedCategory == Categories.health
+                          ? kActiveColor
+                          : kInactiveColor,
+                      categoryName: 'health',
+                      categoryTextColor: selectedCategory == Categories.health
+                          ? kInactiveColor
+                          : kActiveColor,
+                    ),
+                    CategoryCard(
+                      onPress: () {
+                        setState(() {
+                          selectedCategory = Categories.science;
+                          stream = Stream.fromFuture(
+                            NetworkHelper(
+                                    'https://newsapi.org/v2/top-headlines?country=de&category=science&apiKey=$apiKey')
+                                .getData(),
+                          );
+                        });
+                      },
+                      categoryColor: selectedCategory == Categories.science
+                          ? kActiveColor
+                          : kInactiveColor,
+                      categoryName: 'science',
+                      categoryTextColor: selectedCategory == Categories.science
+                          ? kInactiveColor
+                          : kActiveColor,
+                    ),
+                    CategoryCard(
+                      onPress: () {
+                        setState(() {
+                          selectedCategory = Categories.sports;
+                          stream = Stream.fromFuture(
+                            NetworkHelper(
+                                    'https://newsapi.org/v2/top-headlines?country=de&category=sports&apiKey=$apiKey')
+                                .getData(),
+                          );
+                        });
+                      },
+                      categoryColor: selectedCategory == Categories.sports
+                          ? kActiveColor
+                          : kInactiveColor,
+                      categoryName: 'sports',
+                      categoryTextColor: selectedCategory == Categories.sports
+                          ? kInactiveColor
+                          : kActiveColor,
+                    ),
+                    CategoryCard(
+                      onPress: () {
+                        setState(() {
+                          selectedCategory = Categories.technology;
+                          stream = Stream.fromFuture(
+                            NetworkHelper(
+                                    'https://newsapi.org/v2/top-headlines?country=de&category=technology&apiKey=$apiKey')
+                                .getData(),
+                          );
+                        });
+                      },
+                      categoryColor: selectedCategory == Categories.technology
+                          ? kActiveColor
+                          : kInactiveColor,
+                      categoryName: 'technology',
+                      categoryTextColor:
+                          selectedCategory == Categories.technology
+                              ? kInactiveColor
+                              : kActiveColor,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(left: 15.0, bottom: 5.0),
               child: Text(
                 'News',
                 style: TextStyle(
-                  fontSize: 20.0,
+                  fontSize: 25.0,
                   fontWeight: FontWeight.bold,
                   color: Color(0xFF072B39),
                 ),
               ),
             ),
-            Expanded(
-              flex: 7,
-              child: Column(
-                children: <Widget>[
-                  NewsCards(),
-                ],
-              ),
-            ),
+            StreamBuilder(
+              stream: stream,
+              builder: (context, snapshot) {
+                List<Widget> list = [];
+                if (snapshot == null) {
+                  return Container(
+                    child: CircularProgressIndicator(),
+                  );
+                } else {
+                  for (var article in snapshot.data["articles"]) {
+                    var title = article['title'].toString();
+                    var image = article['urlToImage'].toString();
+                    var publishedTime = article["publishedAt"].toString();
+                    var description = article["description"].toString();
+                    var content = article["content"].toString();
+
+                    list.add(Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: NewsCards(
+                        articleImage: image,
+                        articleTitle: title,
+                        publishedTime: publishedTime,
+                        onPress: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) {
+                              return NewsDetailsScreen(
+                                descriptions: description,
+                                title: title,
+                                imgUrl: image,
+                                content: content,
+                                publishedAt: publishedTime,
+                              );
+                            }),
+                          );
+                        },
+                      ),
+                    ));
+                  }
+                  return Column(
+                    children: list,
+                  );
+                }
+              },
+            )
           ],
         ),
       ),
