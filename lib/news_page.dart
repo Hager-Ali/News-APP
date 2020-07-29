@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:news_app/details_page.dart';
 import 'package:news_app/networking.dart';
@@ -30,6 +32,8 @@ class _NewsPageState extends State<NewsPage> {
   Color sportsCardColor = kInactiveColor;
   Color technologyCardColor = kInactiveColor;
 
+  String category = 'general';
+
   Categories selectedCategory = Categories.general;
   Stream stream = Stream.fromFuture(
     NetworkHelper(
@@ -39,6 +43,13 @@ class _NewsPageState extends State<NewsPage> {
 
   @override
   Widget build(BuildContext context) {
+    Timer.periodic(Duration(seconds: 10), (timer) {
+      stream = Stream.fromFuture(
+        NetworkHelper(
+                'https://newsapi.org/v2/top-headlines?country=de&category=$category&apiKey=$apiKey')
+            .getData(),
+      );
+    });
     return Scaffold(
       appBar: AppBar(
         title: Center(
@@ -71,6 +82,7 @@ class _NewsPageState extends State<NewsPage> {
                     CategoryCard(
                       onPress: () {
                         setState(() {
+                          category = 'general';
                           selectedCategory = Categories.general;
                           stream = Stream.fromFuture(
                             NetworkHelper(
@@ -90,6 +102,7 @@ class _NewsPageState extends State<NewsPage> {
                     CategoryCard(
                       onPress: () {
                         setState(() {
+                          category = 'business';
                           selectedCategory = Categories.business;
                           stream = Stream.fromFuture(
                             NetworkHelper(
@@ -109,6 +122,7 @@ class _NewsPageState extends State<NewsPage> {
                     CategoryCard(
                       onPress: () {
                         setState(() {
+                          category = 'entertainment';
                           selectedCategory = Categories.entertainment;
                           stream = Stream.fromFuture(
                             NetworkHelper(
@@ -130,6 +144,7 @@ class _NewsPageState extends State<NewsPage> {
                     CategoryCard(
                       onPress: () {
                         setState(() {
+                          category = 'health';
                           selectedCategory = Categories.health;
                           stream = Stream.fromFuture(
                             NetworkHelper(
@@ -149,6 +164,7 @@ class _NewsPageState extends State<NewsPage> {
                     CategoryCard(
                       onPress: () {
                         setState(() {
+                          category = 'science';
                           selectedCategory = Categories.science;
                           stream = Stream.fromFuture(
                             NetworkHelper(
@@ -168,6 +184,7 @@ class _NewsPageState extends State<NewsPage> {
                     CategoryCard(
                       onPress: () {
                         setState(() {
+                          category = 'sports';
                           selectedCategory = Categories.sports;
                           stream = Stream.fromFuture(
                             NetworkHelper(
@@ -187,6 +204,7 @@ class _NewsPageState extends State<NewsPage> {
                     CategoryCard(
                       onPress: () {
                         setState(() {
+                          category = 'technology';
                           selectedCategory = Categories.technology;
                           stream = Stream.fromFuture(
                             NetworkHelper(
