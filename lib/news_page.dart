@@ -42,7 +42,8 @@ class _NewsPageState extends State<NewsPage> {
   );
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     Timer.periodic(Duration(seconds: 10), (timer) {
       stream = Stream.fromFuture(
         NetworkHelper(
@@ -50,6 +51,10 @@ class _NewsPageState extends State<NewsPage> {
             .getData(),
       );
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Center(
